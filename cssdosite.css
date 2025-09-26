@@ -73,7 +73,7 @@ div h1{
 /* MAIN (conteúdo branco ao lado) */
 main {
   flex: 1;
-  background: #5576D9;
+  background-color: #5576D9;
   padding: 20px;
   height: 1000px;
   min-width: 320px;
