@@ -20,13 +20,17 @@ width: 100%;
 
 .login{
     border-radius: 10px;
-    min-width: 50px;
-    max-width: 100px;
-    width: 200px;
-    transition-duration: 1s;
+    min-width: auto;
+    width: 100px;
 }
-.login:hover{
-    color: #000dff;
+a{
+    text-decoration: none;
+    transition-duration: 1s;
+    color: black;
+}
+a:hover{
+    text-decoration:underline;
+    color: #00a2ff;
 }
 /*FIM DO LOGIN*/
 

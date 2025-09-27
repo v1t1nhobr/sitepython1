@@ -1,0 +1,149 @@
+@charset "UTF-8";
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #e3ecff, #f6f9ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      padding: 40px 30px;
+      border-radius: 12px;
+      width: 380px;
+      box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .icon {
+      background: #1e74ff;
+      color: #fff;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto 15px;
+      font-size: 28px;
+    }
+
+    h2 {
+      margin-bottom: 8px;
+      font-size: 22px;
+      color: #222;
+    }
+
+    p {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      font-size: 14px;
+      margin-bottom: 5px;
+      color: #444;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      font-size: 14px;
+    }
+
+    input:focus {
+      border-color: #1e74ff;
+      outline: none;
+      box-shadow: 0px 0px 6px rgba(30, 116, 255, 0.4);
+    }
+
+    .forgot {
+      display: block;
+      text-align: right;
+      margin-top: -12px;
+      margin-bottom: 20px;
+      font-size: 13px;
+    }
+
+    .forgot a {
+      color: #1e74ff;
+      text-decoration: none;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: #1e74ff;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #0f5adb;
+    }
+
+    .divider {
+      margin: 25px 0;
+      font-size: 13px;
+      color: #777;
+      position: relative;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 40%;
+      height: 1px;
+      background: #ddd;
+    }
+
+    .divider::before {
+      left: 0;
+    }
+
+    .divider::after {
+      right: 0;
+    }
+
+    .signup {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .signup a {
+      color: #1e74ff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .terms {
+      margin-top: 25px;
+      font-size: 12px;
+      color: #777;
+    }
+
+    .terms a {
+      color: #1e74ff;
+      text-decoration: none;
+    }
