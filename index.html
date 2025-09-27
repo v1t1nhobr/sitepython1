@@ -1,45 +1,51 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="cssdosite.css">
-  <link rel="shortcut icon" href="img/TASKO.ico" type="image/x-icon">
-  <title>Tasko</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'cssdosite.css' %}">
+  <link rel="shortcut icon" href="{% static 'img/TASKO.ico' %}" type="image/x-icon">
+  <title>Tasko - Dashboard</title>
 </head>
 <body>
-  <header>
-    <div style="text-align: right;">
-      <button class="login"><a href="Login Python/login.html">👤 LOGIN</a> </button>
-    </div>
-  </header>
+  <header>
+    <div style="text-align: right;">
+        {% if user.is_authenticated %}
+            <span style="margin-right: 15px;">Olá, {{ user.get_full_name|default:user.username }}!</span>
+            <button class="login"><a href="{% url 'logout' %}">👤 SAIR</a></button>
+        {% else %}
+            <button class="login"><a href="{% url 'login' %}">👤 LOGIN</a></button>
+        {% endif %}
+    </div>
+  </header>
 
-  <div class="container">
-    <aside class="sidebar">
-      <nav>
-        <ul>
-          <div>
-            <h1>☰</h1>
-              <li>Minhas tarefas</li>
-              <li>Concluídas</li>
-              <li>Pendentes</li>
-              <li>Categorias</li>
-              <li>Configurações</li>
-          </div>
-        </ul>
-      </nav>
-    </aside>
+  <div class="container">
+    <aside class="sidebar">
+      <nav>
+        <ul>
+          <div>
+            <h1>☰</h1>
+              <li>Minhas tarefas</li>
+              <li>Concluídas</li>
+              <li>Pendentes</li>
+              <li>Categorias</li>
+              <li>Configurações</li>
+          </div>
+        </ul>
+      </nav>
+    </aside>
 
-    <main>
-      <article>
-        <h1>Suas tarefas</h1>
-      </article>
+    <main>
+      <article>
+        <h1>Suas tarefas</h1>
+      </article>
 
-      <aside class="Tarefas">
-           <button>Criar + Tarefas</button>
-        </aside>
+      <aside class="Tarefas">
+           <button>Criar + Tarefas</button>
+        </aside>
 
-    </main>
-  </div>
+    </main>
+  </div>
 </body>
 </html>
