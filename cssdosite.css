@@ -14,7 +14,7 @@
 /*LOGIN*/
 header{
 width: 800px;
-background-color: #1848D9;
+background-color:#3c46fa;
 width: 100%;
 }
 
@@ -37,7 +37,7 @@ a:hover{
 /*SIDEBAR*/
 .sidebar{
     height: 110vh;
-    background-color: #454ccc;
+    background-color: #3c46fa;
     min-width: 200px;
     max-width: 200px;
     color: white;
@@ -100,7 +100,7 @@ main article h1{
 
 .Tarefas button{
  border-radius: 10px;
- background-color: #00a2ff;
+ background-color: white;
  width: 100px;
  
  transition-duration: 1s;
@@ -111,5 +111,6 @@ main article h1{
 
 .Tarefas >button:hover{
     width: 400px;
+    background-color:bisque
 }
 
