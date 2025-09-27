@@ -1,9 +1,10 @@
 import sqlite3
 
-con = sqlite3.connect("meu_banco.db")
+# conecta no banco que você já criou
+con = sqlite3.connect("meubanco.db")
 cur = con.cursor()
 
-# Criar tabela de usuários
+# cria tabela de usuários
 cur.execute("""
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -14,10 +15,11 @@ CREATE TABLE IF NOT EXISTS users (
 )
 """)
 
-# Inserir usuário de teste
+# adiciona um usuário de teste
 try:
-    cur.execute("INSERT INTO users (nome, email, senha) VALUES (?, ?, ?)",
+    cur.execute("INSERT INTO users (nome, email, senha) VALUES (?, ?, ?)", 
                 ("Rodrigo", "teste@email.com", "1234"))
+    print("Usuário de teste criado com sucesso!")
 except sqlite3.IntegrityError:
     print("Usuário já existe!")
 
