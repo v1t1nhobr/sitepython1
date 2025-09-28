@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tela de Login</title>
+  <link rel="stylesheet" href="{% static 'tarefas/style.css' %}">
+</head>
+<body>
+  <div class="container">
+    <div class="icon">👤</div>
+    <h2>Bem-vindo!</h2>
+    <p>Entre na sua conta para continuar</p>
+    
+    {% if error_message %}
+        <p style="color: red; font-weight: bold;">{{ error_message }}</p>
+    {% endif %}
+    
+        <form method="POST" action="{% url 'tarefas:login' %}">
+        {% csrf_token %} 
+        
+      <label for="username">Usuário / Email</label>
+      <input type="text" id="username" name="username" placeholder="seu_usuario ou email" required>
+      
+      <label for="password">Senha</label>
+      <input type="password" id="password" name="password" placeholder="Sua senha" required>
+
+      <div class="forgot"><a href="#">Esqueceu sua senha?</a></div>
+      
+      <button type="submit" class="btn">Entrar</button>
+    </form>
+    
+    <div class="divider">ou</div>
+    
+    <div class="signup">
+      Não tem uma conta? <a href="{% url 'tarefas:cadastro' %}">Criar conta</a>
+    </div>
+    
+    <div class="terms">
+      Ao continuar, você aceita nossos <a href="#">Termos de Uso</a> e <a href="#">Política de Privacidade</a>.
+    </div>
+  </div>
+</body>
+</html>

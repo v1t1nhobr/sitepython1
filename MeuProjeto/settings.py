@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+# Cole este bloco para substituir o seu INSTALLED_APPS atual
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tarefas', # Verifique se esta linha está perfeitamente alinhada com as anteriores
+    'tarefas',
 ]
 
 MIDDLEWARE = [
