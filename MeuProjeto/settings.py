@@ -90,5 +90,5 @@ STATICFILES_DIRS = [
 
 ]
 
-# LINHA ADICIONADA: Configuração de email para o terminal
+# Configuração de email para o terminal
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

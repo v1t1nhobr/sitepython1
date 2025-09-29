@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import Tarefa
-# MUDANÇA AQUI: Importando nossos formulários customizados
+# Importando nossos formulários customizados
 from .forms import TarefaForm, CustomUserCreationForm 
 
 # --- VIEW DE LOGIN ---
@@ -36,7 +36,7 @@ def cadastro_view(request):
             login(request, user)
             return redirect('tarefas:dashboard')
     else:
-        # MUDANÇA AQUI: Usando o formulário traduzido
+        # Usando o formulário traduzido
         form = CustomUserCreationForm() 
     
     context = {'form': form}
@@ -91,12 +91,10 @@ def logout_view(request):
     logout(request)
     return redirect('tarefas:login')
 
-# No topo do arquivo, adicione a importação do JsonResponse
+
 from django.http import JsonResponse
 
-# ... (todas as suas outras views continuam aqui) ...
-
-# NOVA VIEW QUE FUNCIONA COMO UMA MINI-API
+# MINI-API
 @login_required(login_url='tarefas:login')
 def get_tarefa_json_view(request, pk):
     # Busca a tarefa, garantindo que ela pertence ao usuário logado
@@ -116,17 +114,15 @@ def delete_account_view(request):
         # Pega a senha digitada no formulário de confirmação
         password = request.POST.get('password')
 
-        # Medida de segurança: verifica se a senha digitada é a senha real do usuário
+        # verifica se a senha digitada é a senha real do usuário
         if user.check_password(password):
             # Se a senha estiver correta, apaga o usuário
             user.delete()
             logout(request) # Faz o logout
-            # Você pode criar uma página de "conta deletada com sucesso" ou redirecionar para o login
             return redirect('tarefas:login') 
         else:
             # Se a senha estiver incorreta, volta para a mesma página com uma mensagem de erro
             context = {'error_message': 'Senha incorreta. A conta não foi deletada.'}
             return render(request, 'tarefas/delete_account_confirm.html', context)
 
-    # Se o método for GET, apenas mostra a página de confirmação
     return render(request, 'tarefas/delete_account_confirm.html')

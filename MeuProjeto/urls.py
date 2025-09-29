@@ -6,7 +6,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     
-    # LINHA ADICIONADA: Inclui as URLs de 'esqueceu a senha', etc.
+    # Inclui as URLs de 'esqueceu a senha', etc.
     path('accounts/', include('django.contrib.auth.urls')),
     
     # Sua linha existente que aponta para as URLs do app 'tarefas'

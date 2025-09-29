@@ -27,7 +27,7 @@ class CustomUserCreationForm(UserCreationForm):
         self.fields['username'].label = "Nome de usuário"
         self.fields['username'].help_text = "Obrigatório. 150 caracteres ou menos. Letras, dígitos e @/./+/-/_ apenas."
 
-        # MUDANÇA AQUI: limpamos o help_text automático dos campos de senha
+        # limpamos o help_text automático dos campos de senha
         self.fields['password1'].label = "Senha"
         self.fields['password1'].help_text = None # Remove o texto de ajuda padrão
         
