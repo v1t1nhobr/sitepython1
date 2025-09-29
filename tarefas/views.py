@@ -1,70 +1,132 @@
 # tarefas/views.py
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm  # <-- 1. IMPORTAÇÃO NOVA
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from .models import Tarefa
+# MUDANÇA AQUI: Importando nossos formulários customizados
+from .forms import TarefaForm, CustomUserCreationForm 
 
-# A função de login que o urls.py está procurando:
+# --- VIEW DE LOGIN ---
 def login_view(request):
-    """Processa o formulário de login."""
-    # Se o usuário já está logado, redireciona para a dashboard
     if request.user.is_authenticated:
         return redirect('tarefas:dashboard')
 
     if request.method == 'POST':
-        # Esta parte é crucial: pega os dados do formulário e tenta autenticar
         usuario_digitado = request.POST.get('username') 
         senha_digitada = request.POST.get('password')
-        
         user = authenticate(request, username=usuario_digitado, password=senha_digitada)
         
         if user is not None:
             login(request, user)
             return redirect('tarefas:dashboard')
         else:
-            # Mensagem de erro se a autenticação falhar
             context = {'error_message': 'Usuário ou senha inválidos. Tente novamente.'}
             return render(request, 'tarefas/login.html', context)
     
-    # Exibe o formulário de login (login.html)
     return render(request, 'tarefas/login.html')
 
+# --- VIEW DE CADASTRO (ATUALIZADA) ---
+def cadastro_view(request):
+    if request.method == 'POST':
+        # MUDANÇA AQUI: Usando o formulário traduzido
+        form = CustomUserCreationForm(request.POST) 
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('tarefas:dashboard')
+    else:
+        # MUDANÇA AQUI: Usando o formulário traduzido
+        form = CustomUserCreationForm() 
+    
+    context = {'form': form}
+    return render(request, 'tarefas/cadastro.html', context)
 
-# A função de dashboard que o urls.py está procurando:
-@login_required(login_url='tarefas:login') # Protege a página: só acessível após login
+# --- VIEW DA DASHBOARD---
+@login_required(login_url='tarefas:login')
 def dashboard_view(request):
-    """Página da Dashboard - A área restrita."""
-    # O HTML da Dashboard será renderizado
-    return render(request, 'tarefas/dashboard.html')
+    if request.method == 'POST':
+        form = TarefaForm(request.POST)
+        if form.is_valid():
+            nova_tarefa = form.save(commit=False)
+            nova_tarefa.usuario = request.user
+            nova_tarefa.save()
+            return redirect('tarefas:dashboard')
+    else:
+        form = TarefaForm()
 
+    tarefas_do_usuario = Tarefa.objects.filter(usuario=request.user).order_by('-data_criacao')
+    context = {
+        'tarefas': tarefas_do_usuario,
+        'form': form
+    }
+    return render(request, 'tarefas/dashboard.html', context)
 
-# A função de logout que o urls.py está procurando:
+# --- VIEW DE ATUALIZAR---
+@login_required(login_url='tarefas:login')
+def update_tarefa_view(request, pk):
+    tarefa = get_object_or_404(Tarefa, pk=pk, usuario=request.user)
+    
+    if request.method == 'POST':
+        form = TarefaForm(request.POST, instance=tarefa)
+        if form.is_valid():
+            form.save()
+            return redirect('tarefas:dashboard')
+    else:
+        form = TarefaForm(instance=tarefa)
+
+    context = {'form': form, 'tarefa': tarefa}
+    return render(request, 'tarefas/update_tarefa.html', context)
+
+# --- VIEW DE DELETAR ---
+@login_required(login_url='tarefas:login')
+def delete_tarefa_view(request, pk):
+    tarefa = get_object_or_404(Tarefa, pk=pk, usuario=request.user)
+    if request.method == 'POST':
+        tarefa.delete()
+    return redirect('tarefas:dashboard')
+
+# --- VIEW DE LOGOUT ---
 def logout_view(request):
-    """Desloga o usuário e redireciona para a página de login."""
     logout(request)
     return redirect('tarefas:login')
 
+# No topo do arquivo, adicione a importação do JsonResponse
+from django.http import JsonResponse
 
-# 2. NOVA FUNÇÃO DE CADASTRO
-def cadastro_view(request):
-    """Processa o formulário de criação de nova conta."""
+# ... (todas as suas outras views continuam aqui) ...
+
+# NOVA VIEW QUE FUNCIONA COMO UMA MINI-API
+@login_required(login_url='tarefas:login')
+def get_tarefa_json_view(request, pk):
+    # Busca a tarefa, garantindo que ela pertence ao usuário logado
+    tarefa = get_object_or_404(Tarefa, pk=pk, usuario=request.user)
+    # Converte os dados da tarefa para um dicionário
+    data = {
+        'titulo': tarefa.titulo,
+        'descricao': tarefa.descricao
+    }
+    # Retorna os dados como uma resposta JSON
+    return JsonResponse(data)
+
+@login_required(login_url='tarefas:login')
+def delete_account_view(request):
     if request.method == 'POST':
-        # Cria uma instância do formulário com os dados enviados
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            # Se o formulário for válido, salva o novo usuário no banco de dados
-            user = form.save()
-            # Loga o usuário recém-criado automaticamente
-            login(request, user)
-            # Redireciona para a dashboard
-            return redirect('tarefas:dashboard')
-    else:
-        # Se for um GET, apenas cria uma instância do formulário vazio
-        form = UserCreationForm()
-    
-    # Prepara o contexto para enviar o formulário para o template
-    context = {'form': form}
-    # Renderiza a página de cadastro com o formulário
-    return render(request, 'tarefas/cadastro.html', context)
+        user = request.user
+        # Pega a senha digitada no formulário de confirmação
+        password = request.POST.get('password')
+
+        # Medida de segurança: verifica se a senha digitada é a senha real do usuário
+        if user.check_password(password):
+            # Se a senha estiver correta, apaga o usuário
+            user.delete()
+            logout(request) # Faz o logout
+            # Você pode criar uma página de "conta deletada com sucesso" ou redirecionar para o login
+            return redirect('tarefas:login') 
+        else:
+            # Se a senha estiver incorreta, volta para a mesma página com uma mensagem de erro
+            context = {'error_message': 'Senha incorreta. A conta não foi deletada.'}
+            return render(request, 'tarefas/delete_account_confirm.html', context)
+
+    # Se o método for GET, apenas mostra a página de confirmação
+    return render(request, 'tarefas/delete_account_confirm.html')

@@ -2,52 +2,132 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <link rel="stylesheet" href="{% static 'tarefas/cssdosite.css' %}">
-  <link rel="shortcut icon" href="{% static 'tarefas/TASKO.ico' %}" type="image/x-icon">
-  
-  <title>Tasko - Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasko - Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/cssdosite.css' %}">
+    <link rel="shortcut icon" href="{% static 'tarefas/TASKO.ico' %}" type="image/x-icon">
 </head>
 <body>
-  <header>
-    <div style="text-align: right;">
-        {% if user.is_authenticated %}
-            <span style="margin-right: 15px;">Olá, {{ user.get_full_name|default:user.username }}!</span>
-            <button class="login"><a href="{% url 'tarefas:logout' %}">👤 SAIR</a></button>
-        {% else %}
-            <button class="login"><a href="{% url 'tarefas:login' %}">👤 LOGIN</a></button>
-        {% endif %}
-    </div>
-  </header>
+    <header>
+        <div class="login">
+            {% if user.is_authenticated %}
+                <span style="margin-right: 15px;">Olá, {{ user.get_full_name|default:user.username }}!</span>
+                <a href="{% url 'tarefas:logout' %}">👤 SAIR</a>
+            {% endif %}
+        </div>
+    </header>
 
-  <div class="container">
-    <aside class="sidebar">
-      <nav>
+    <div class="container">
+       <aside class="sidebar">
+    <h1>☰ MENU</h1>
+    <nav>
         <ul>
-          <div>
-            <h1>☰</h1>
-              <li>Minhas tarefas</li>
-              <li>Concluídas</li>
-              <li>Pendentes</li>
-              <li>Categorias</li>
-              <li>Configurações</li>
-          </div>
+            <li><a href="{% url 'tarefas:dashboard' %}">Minhas tarefas</a></li>
+            <li>Concluídas</li>
+            <li>Pendentes</li>
+            <li class="sidebar-delete-link"><a href="{% url 'tarefas:delete_account' %}">Deletar Conta</a></li>
         </ul>
-      </nav>
-    </aside>
+    </nav>
+</aside>
 
-    <main>
-      <article>
-        <h1>Suas tarefas</h1>
-      </article>
+        <main>
+            <div class="main-header">
+                <h1>Suas tarefas</h1>
+                <button id="btn-abrir-modal-criar">Criar + Tarefas</button>
+            </div>
+            
+            <div class="lista-tarefas">
+                {% for tarefa in tarefas %}
+                    <div class="tarefa-item">
+                        <div>
+                            <h3>{{ tarefa.titulo }}</h3>
+                            {% if tarefa.descricao %}<p>{{ tarefa.descricao }}</p>{% endif %}
+                        </div>
+                        <div class="tarefa-actions">
+                            <button class="btn-editar" data-task-id="{{ tarefa.pk }}">Editar</button>
+                            <form action="{% url 'tarefas:delete_tarefa' pk=tarefa.pk %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-remover">Remover</button>
+                            </form>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p>Você ainda não tem tarefas. Crie uma!</p>
+                {% endfor %}
+            </div>
+        </main>
+    </div>
 
-      <aside class="Tarefas">
-          <button>Criar + Tarefas</button>
-        </aside>
+    <div id="modal-criar" class="modal-overlay">
+        <div class="modal-content">
+            <h2>Criar Nova Tarefa</h2>
+            <form method="POST" action="{% url 'tarefas:dashboard' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancelar" id="btn-cancelar-criar">Cancelar</button>
+                    <button type="submit" class="btn">Salvar Tarefa</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    </main>
-  </div>
+    <div id="modal-editar" class="modal-overlay">
+        <div class="modal-content">
+            <h2>Editar Tarefa</h2>
+            <form id="edit-form" method="POST" action="">
+                {% csrf_token %}
+                <label for="edit-titulo">Título</label>
+                <input type="text" id="edit-titulo" name="titulo" required>
+                <label for="edit-descricao">Descrição</label>
+                <textarea id="edit-descricao" name="descricao" rows="4"></textarea>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancelar" id="btn-cancelar-editar">Cancelar</button>
+                    <button type="submit" class="btn">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // --- LÓGICA CORRETA PARA O MODAL DE CRIAR ---
+        const btnAbrirModalCriar = document.getElementById('btn-abrir-modal-criar');
+        const modalCriar = document.getElementById('modal-criar');
+        const btnCancelarCriar = document.getElementById('btn-cancelar-criar');
+
+        btnAbrirModalCriar.addEventListener('click', () => modalCriar.style.display = 'flex');
+        btnCancelarCriar.addEventListener('click', () => modalCriar.style.display = 'none');
+
+        // --- LÓGICA CORRETA PARA O MODAL DE EDITAR ---
+        const modalEditar = document.getElementById('modal-editar');
+        const btnCancelarEditar = document.getElementById('btn-cancelar-editar');
+        const editForm = document.getElementById('edit-form');
+        const editTitulo = document.getElementById('edit-titulo');
+        const editDescricao = document.getElementById('edit-descricao');
+        
+        document.querySelectorAll('.btn-editar').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const taskId = event.target.dataset.taskId;
+                
+                fetch(`/api/tarefa/${taskId}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        editTitulo.value = data.titulo;
+                        editDescricao.value = data.descricao;
+                        editForm.action = `/tarefa/update/${taskId}/`;
+                        modalEditar.style.display = 'flex';
+                    });
+            });
+        });
+        
+        btnCancelarEditar.addEventListener('click', () => modalEditar.style.display = 'none');
+
+        // Fecha os modais se clicar fora da caixa de conteúdo
+        window.addEventListener('click', (event) => {
+            if (event.target == modalCriar) modalCriar.style.display = 'none';
+            if (event.target == modalEditar) modalEditar.style.display = 'none';
+        });
+    </script>
 </body>
 </html>

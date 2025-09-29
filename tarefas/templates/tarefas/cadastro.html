@@ -5,44 +5,41 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tasko - Criar Nova Conta</title>
-  <link rel="stylesheet" href="{% static 'tarefas/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/cssdosite.css' %}">
 </head>
 <body>
   <div class="container">
-    <div class="icon">👤</div>
-    <h2>Crie sua Conta</h2>
-    <p>É rápido e fácil.</p>
-    
-    <form method="POST" action="{% url 'tarefas:cadastro' %}">
-        {% csrf_token %} 
-
-        {{ form.non_field_errors }}
+    <div class="form-page-container">
+        <h2>Crie sua Conta</h2>
+        <p>É rápido e fácil.</p>
         
-        <label for="id_username">Nome de usuário:</label>
-        {{ form.username }}
-        {{ form.username.errors }}
-
-        <label for="id_email">Email:</label>
-        {{ form.email }}
-        {{ form.email.errors }}
-
-        <label for="id_password1">Senha:</label>
-        {{ form.password1 }} 
-        {{ form.password1.errors }}
-
-        <label for="id_password2">Confirme a Senha:</label>
-        {{ form.password2 }}
-        {{ form.password2.errors }}
-
-        <button type="submit" class="btn">Criar Conta</button>
-    </form>
-    
-    <div class="divider">ou</div>
-    
-    <div class="signup">
-      Já tem uma conta? <a href="{% url 'tarefas:login' %}">Faça Login</a>
+        <form method="POST" action="{% url 'tarefas:cadastro' %}">
+            {% csrf_token %} 
+            
+            <p>{{ form.username.label_tag }} {{ form.username }}</p>
+            <div class="help-text">{{ form.username.help_text }}</div>
+            
+            <p>{{ form.password1.label_tag }} {{ form.password1 }}</p>
+            <p>{{ form.password2.label_tag }} {{ form.password2 }}</p>
+            
+            <div class="help-text">
+                <ul >
+                    <li>Sua senha não pode ser muito parecida com suas outras informações pessoais.</li>
+                    <li>Sua senha deve conter pelo menos 8 caracteres.</li>
+                    <li>Sua senha не pode ser uma senha comumente usada.</li>
+                    <li>Sua senha não pode ser inteiramente numérica.</li>
+                </ul>
+            </div>
+            
+            <button type="submit" class="btn">Criar Conta</button>
+        </form>
+        
+        <div class="divider" style="margin-top: 15px;">ou</div>
+        
+        <div class="signup">
+          Já tem uma conta? <a href="{% url 'tarefas:login' %}">Faça Login</a>
+        </div>
     </div>
-    
   </div>
 </body>
 </html>

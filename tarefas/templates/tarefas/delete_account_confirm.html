@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmar Exclusão da Conta</title>
+    <link rel="stylesheet" href="{% static 'css/cssdosite.css' %}">
+</head>
+<body>
+    <div class="form-page-container">
+        <h2>Você tem certeza?</h2>
+        <p style="color: red; font-weight: bold;">
+            Esta ação é permanente e não pode ser desfeita. Todas as suas tarefas serão apagadas.
+        </p>
+        <p>Para confirmar, por favor, digite sua senha abaixo:</p>
+
+        <form method="POST">
+            {% csrf_token %}
+            <label for="id_password">Sua Senha</label>
+            <input type="password" name="password" id="id_password" required>
+
+            {% if error_message %}
+                <p style="color: red; margin-top: 10px;">{{ error_message }}</p>
+            {% endif %}
+            
+            <div class="modal-actions">
+                <a href="{% url 'tarefas:dashboard' %}" class="btn-cancelar">Cancelar</a>
+                <button type="submit" class="btn-delete-confirm">Sim, deletar minha conta</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

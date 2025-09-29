@@ -1,0 +1,441 @@
+@charset "UTF-8";
+
+/* ================================
+   CONFIGURAÇÕES GERAIS E FONTES
+   ================================ */
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Roboto", sans-serif;
+    color: #333;
+    background-color: #f4f7f6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* ================================
+   HEADER
+   ================================ */
+header {
+    background-color: #3c46fa;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    color: white;
+    height: 50px;
+}
+
+header .login a {
+    background-color: white;
+    color: #3c46fa;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+header .login a:hover {
+    background-color: #e0e0e0;
+    text-decoration: none;
+}
+
+/* ================================
+   LAYOUT PRINCIPAL
+   ================================ */
+.container {
+    display: flex;
+    min-height: calc(100vh - 50px);
+}
+
+/* ================================
+   SIDEBAR (Menu Lateral)
+   ================================ */
+.sidebar {
+    background-color: #3c46fa;
+    width: 220px;
+    color: white;
+    padding-top: 20px;
+}
+
+.sidebar h1 {
+    padding: 0 20px 20px 20px;
+    font-family: "Oswald", sans-serif;
+    border-bottom: 1px solid #5a63fb;
+}
+
+.sidebar nav ul {
+    list-style: none;
+}
+
+.sidebar nav li {
+    font-size: 1.1em;
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: "Oswald", sans-serif;
+}
+
+.sidebar nav li:hover {
+    background-color: #5a63fb;
+}
+
+/* ================================
+   MAIN (Conteúdo Principal)
+   ================================ */
+main {
+    flex: 1;
+    padding: 30px;
+    background-color: #ffffff;
+}
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.main-header h1 {
+    font-family: "Oswald", sans-serif;
+    font-size: 2.5em;
+    color: #2c3e50;
+}
+
+/* =======================================
+   SEÇÃO DE TAREFAS E MODAIS
+   ======================================= */
+
+.lista-tarefas {
+    margin-top: 20px;
+}
+
+.tarefa-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f9fa;
+    border-left: 5px solid #3c46fa;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.tarefa-item h3 {
+    margin-bottom: 5px;
+    color: #34495e;
+    font-family: "Oswald", sans-serif;
+}
+
+.tarefa-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#btn-abrir-modal-criar {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#btn-abrir-modal-criar:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+.btn-editar {
+    background-color: #ffc107;
+    color: #212529;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+}
+.btn-editar:hover {
+    background-color: #e0a800;
+}
+
+.btn-remover {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+}
+.btn-remover:hover {
+    background-color: #c82333;
+}
+
+/* =======================================
+   ESTILOS MELHORADOS PARA OS MODAIS
+   ======================================= */
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content {
+    background-color: #ffffff;
+    margin: auto;
+    padding: 30px;
+    border: none;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { background-color: rgba(0, 0, 0, 0); }
+    to { background-color: rgba(0, 0, 0, 0.6); }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-30px) scale(0.95); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.modal-content h2 {
+    font-family: 'Oswald', sans-serif;
+    color: #333;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.modal-content form p {
+    margin-bottom: 15px;
+}
+
+.modal-content form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+    text-align: left;
+}
+
+.modal-content input, 
+.modal-content textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1em;
+}
+
+.modal-content input:focus, 
+.modal-content textarea:focus {
+    outline: none;
+    border-color: #3c46fa;
+    box-shadow: 0 0 0 3px rgba(60, 70, 250, 0.2);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 25px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.modal-actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.modal-actions .btn-cancelar {
+    background-color: #6c757d;
+    color: white;
+}
+.modal-actions .btn-cancelar:hover {
+    background-color: #5a6268;
+}
+
+.modal-actions .btn { /* Botão Salvar */
+    background-color: #28a745;
+    color: white;
+}
+.modal-actions .btn:hover {
+    background-color: #218838;
+}
+
+/* =======================================
+   ESTILOS PARA PÁGINAS DE FORMULÁRIO
+   (LOGIN, CADASTRO, EDITAR TAREFA)
+   ======================================= */
+
+.form-page-container {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+    margin: auto; /* Centraliza o card na página */
+}
+
+.form-page-container .icon {
+    background-color: #3c46fa;
+    color: white;
+    font-size: 24px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 20px;
+}
+
+.form-page-container h2 {
+    font-family: 'Oswald', sans-serif;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.form-page-container p {
+    color: #666;
+    margin-bottom: 25px;
+}
+
+.form-page-container form label {
+    display: block;
+    text-align: left;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.form-page-container form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.form-page-container .forgot {
+    text-align: right;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.form-page-container .forgot a {
+    color: #3c46fa;
+}
+
+.form-page-container .btn {
+    width: 100%;
+    background-color: #3c46fa;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.form-page-container .btn:hover {
+    background-color: #2a31b1;
+}
+
+.form-page-container .divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #aaa;
+    margin: 20px 0;
+}
+
+.form-page-container .divider::before,
+.form-page-container .divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #ddd;
+}
+
+.form-page-container .divider:not(:empty)::before {
+    margin-right: .5em;
+}
+
+.form-page-container .divider:not(:empty)::after {
+    margin-left: .5em;
+}
+
+.form-page-container .signup {
+    font-size: 14px;
+}
+
+.form-page-container .signup a {
+    color: #3c46fa;
+    font-weight: bold;
+}
+
+/* Botão de confirmação de exclusão */
+.btn-delete-confirm {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.btn-delete-confirm:hover {
+    background-color: #c82333;
+}
+
+/* Link para deletar conta na sidebar */
+.sidebar-delete-link {
+    margin-top: 30px; /* Adiciona um espaço acima */
+    border-top: 1px solid #5a63fb;
+}
+.sidebar-delete-link a {
+    color: #ffcccc; /* Um vermelho claro para indicar perigo */
+}
+.sidebar-delete-link:hover {
+    background-color: #c82333 !important; /* Vermelho escuro no hover */
+}
