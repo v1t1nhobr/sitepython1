@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Tarefa</title>
+    <link rel="stylesheet" href="{% static 'css/cssdosite.css' %}">
+    <link rel="shortcut icon" href="{% static 'tarefas/TASKO.ico' %}" type="image/x-icon">
+</head>
+<body>
+    <div class="form-page-container">
+        <h1>Editar Tarefa</h1>
+        <p>Altere os dados da sua tarefa abaixo.</p>
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="modal-actions">
+                <a href="{% url 'tarefas:dashboard' %}" class="btn-cancelar">Cancelar</a>
+                <button type="submit" class="btn">Salvar Alterações</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

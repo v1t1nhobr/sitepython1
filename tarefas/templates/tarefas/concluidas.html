@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Tarefas Concluídas</title>
+    <link rel="stylesheet" href="{% static 'css/cssdosite.css' %}">
+    <link rel="shortcut icon" href="{% static 'tarefas/TASKO.ico' %}" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <div class="login">
+            {% if user.is_authenticated %}
+                <span style="margin-right: 15px;">Olá, {{ user.get_full_name|default:user.username }}!</span>
+                <a href="{% url 'tarefas:logout' %}">👤 SAIR</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <h1>☰ MENU</h1>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'tarefas:dashboard' %}">Minhas tarefas</a></li>
+                    <li class="active"><a href="{% url 'tarefas:concluidas' %}">Concluídas</a></li>
+                    <li>Pendentes</li>
+                    <li class="sidebar-delete-link"><a href="{% url 'tarefas:delete_account' %}">Deletar Conta</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main>
+            <div class="main-header">
+                <h1>Tarefas Concluídas</h1>
+            </div>
+            
+            <div class="lista-tarefas">
+                {% for tarefa in tarefas %}
+                    <div class="tarefa-item tarefa-conclida">
+                        <div>
+                            <h3>{{ tarefa.titulo }}</h3>
+                            {% if tarefa.descricao %}<p>{{ tarefa.descricao }}</p>{% endif %}
+                        </div>
+
+                        <div class="tarefa-actions">
+                            <form action="{% url 'tarefas:delete_tarefa' pk=tarefa.pk %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-remover">Remover</button>
+                            </form>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p>Você não tem nenhuma tarefa concluída.</p>
+                {% endfor %}
+            </div>
+        </main>
+    </div>
+</body>
+</html>

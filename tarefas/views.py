@@ -3,8 +3,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse # <-- ESTA IMPORTAÇÃO ESTAVA FALTANDO
 from .models import Tarefa
-# Importando nossos formulários customizados
 from .forms import TarefaForm, CustomUserCreationForm 
 
 # --- VIEW DE LOGIN ---
@@ -26,17 +26,15 @@ def login_view(request):
     
     return render(request, 'tarefas/login.html')
 
-# --- VIEW DE CADASTRO (ATUALIZADA) ---
+# --- VIEW DE CADASTRO ---
 def cadastro_view(request):
     if request.method == 'POST':
-        # MUDANÇA AQUI: Usando o formulário traduzido
         form = CustomUserCreationForm(request.POST) 
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('tarefas:dashboard')
     else:
-        # Usando o formulário traduzido
         form = CustomUserCreationForm() 
     
     context = {'form': form}
@@ -55,7 +53,7 @@ def dashboard_view(request):
     else:
         form = TarefaForm()
 
-    tarefas_do_usuario = Tarefa.objects.filter(usuario=request.user).order_by('-data_criacao')
+    tarefas_do_usuario = Tarefa.objects.filter(usuario=request.user, concluida=False).order_by('-data_criacao')
     context = {
         'tarefas': tarefas_do_usuario,
         'form': form
@@ -78,7 +76,7 @@ def update_tarefa_view(request, pk):
     context = {'form': form, 'tarefa': tarefa}
     return render(request, 'tarefas/update_tarefa.html', context)
 
-# --- VIEW DE DELETAR ---
+# --- VIEW DE DELETAR TAREFA ---
 @login_required(login_url='tarefas:login')
 def delete_tarefa_view(request, pk):
     tarefa = get_object_or_404(Tarefa, pk=pk, usuario=request.user)
@@ -86,43 +84,52 @@ def delete_tarefa_view(request, pk):
         tarefa.delete()
     return redirect('tarefas:dashboard')
 
+# --- VIEW DE DELETAR CONTA ---
+@login_required(login_url='tarefas:login')
+def delete_account_view(request):
+    if request.method == 'POST':
+        user = request.user
+        password = request.POST.get('password')
+
+        if user.check_password(password):
+            user.delete()
+            logout(request)
+            return redirect('tarefas:login') 
+        else:
+            context = {'error_message': 'Senha incorreta. A conta não foi deletada.'}
+            return render(request, 'tarefas/delete_account_confirm.html', context)
+
+    return render(request, 'tarefas/delete_account_confirm.html')
+
+# --- VIEW DE MARCAR/DESMARCAR TAREFA ---
+@login_required(login_url='tarefas:login')
+def toggle_tarefa_view(request, pk):
+    tarefa = get_object_or_404(Tarefa, pk=pk, usuario=request.user)
+    if request.method == 'POST':
+        tarefa.concluida = not tarefa.concluida
+        tarefa.save()
+    return redirect('tarefas:dashboard')
+
+# --- VIEW DE TAREFAS CONCLUÍDAS ---
+@login_required(login_url='tarefas:login')
+def concluidas_view(request):
+    tarefas_concluidas = Tarefa.objects.filter(usuario=request.user, concluida=True).order_by('-data_criacao')
+    context = {
+        'tarefas': tarefas_concluidas
+    }
+    return render(request, 'tarefas/concluidas.html', context)
+
 # --- VIEW DE LOGOUT ---
 def logout_view(request):
     logout(request)
     return redirect('tarefas:login')
 
-
-from django.http import JsonResponse
-
-# MINI-API
+# --- MINI-API PARA BUSCAR DADOS DE UMA TAREFA ---
 @login_required(login_url='tarefas:login')
 def get_tarefa_json_view(request, pk):
-    # Busca a tarefa, garantindo que ela pertence ao usuário logado
     tarefa = get_object_or_404(Tarefa, pk=pk, usuario=request.user)
-    # Converte os dados da tarefa para um dicionário
     data = {
         'titulo': tarefa.titulo,
         'descricao': tarefa.descricao
     }
-    # Retorna os dados como uma resposta JSON
     return JsonResponse(data)
-
-@login_required(login_url='tarefas:login')
-def delete_account_view(request):
-    if request.method == 'POST':
-        user = request.user
-        # Pega a senha digitada no formulário de confirmação
-        password = request.POST.get('password')
-
-        # verifica se a senha digitada é a senha real do usuário
-        if user.check_password(password):
-            # Se a senha estiver correta, apaga o usuário
-            user.delete()
-            logout(request) # Faz o logout
-            return redirect('tarefas:login') 
-        else:
-            # Se a senha estiver incorreta, volta para a mesma página com uma mensagem de erro
-            context = {'error_message': 'Senha incorreta. A conta não foi deletada.'}
-            return render(request, 'tarefas/delete_account_confirm.html', context)
-
-    return render(request, 'tarefas/delete_account_confirm.html')

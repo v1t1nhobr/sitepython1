@@ -439,3 +439,28 @@ main {
 .sidebar-delete-link:hover {
     background-color: #c82333 !important; /* Vermelho escuro no hover */
 }
+
+/* Estilo para o formulário do checkbox */
+.toggle-form input[type="checkbox"] {
+    transform: scale(1.5); /* Deixa o checkbox um pouco maior */
+    cursor: pointer;
+}
+
+/* Estilo para a tarefa quando estiver concluída */
+.tarefa-concluida h3, .tarefa-concluida p {
+    text-decoration: line-through; /* Risca o texto */
+    color: #aaa; /* Deixa o texto cinza */
+}
+
+/* Ajuste no layout do item da tarefa para incluir o checkbox */
+.tarefa-item {
+    gap: 15px; /* Adiciona um espaço entre os itens */
+}
+
+.sidebar nav li a {
+    display: block; /* Faz o link ocupar todo o espaço do 'li' */
+    padding: 15px 20px;
+}
+.sidebar nav li.active {
+    background-color: #5a63fb;
+}
