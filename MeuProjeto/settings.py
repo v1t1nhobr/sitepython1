@@ -1,20 +1,31 @@
-"""
-Django settings for MeuProjeto project.
-"""
+# settings.py
 
 from pathlib import Path
-import os # <-- Adicionamos esta importação
+import os
+from dotenv import load_dotenv # <-- 1. IMPORTAMOS A FUNÇÃO
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'ezxb2&(!8x)3b8$0ççdgo_tz9&yo@*vh4arwo4-su_mc%$5gagh^ççççççç'
+# 2. CARREGAMOS AS VARIÁVEIS DE AMBIENTE LOGO NO INÍCIO
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# ====================================================================
+# CONFIGURAÇÕES DE SEGURANÇA
+# ====================================================================
+
+# A chave secreta agora é lida DIRETAMENTE do arquivo .env
+# Removemos a chave antiga que estava escrita no código.
+SECRET_KEY = os.getenv('SECRET_KEY')
+
+# Apenas uma definição para DEBUG e ALLOWED_HOSTS
 DEBUG = True
-
 ALLOWED_HOSTS = []
+
+
+# ====================================================================
+# APLICAÇÕES E MIDDLEWARE
+# ====================================================================
 
 # Application definition
 INSTALLED_APPS = [
@@ -24,7 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tarefas',
+    'tarefas', # Sua aplicação
 ]
 
 MIDDLEWARE = [
@@ -56,39 +67,55 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'MeuProjeto.wsgi.application'
 
-# Database
+
+# ====================================================================
+# BANCO DE DADOS (DATABASE)
+# ====================================================================
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'tasko_db',
+        'USER': 'root',
+        'PASSWORD': os.getenv('DB_PASSWORD'), # Lê a senha do .env
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
-# Password validation
+
+# ====================================================================
+# VALIDAÇÃO DE SENHAS E INTERNACIONALIZAÇÃO
+# ====================================================================
+
 AUTH_PASSWORD_VALIDATORS = [
-    { 'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', },
-    { 'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', },
-    { 'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', },
-    { 'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 ]
 
-# Internationalization
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'pt-br' # Mudado para português do Brasil
+TIME_ZONE = 'America/Sao_Paulo' # Mudado para o fuso de São Paulo
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
+
+# ====================================================================
+# ARQUIVOS ESTÁTICOS (STATIC FILES)
+# ====================================================================
+
 STATIC_URL = 'static/'
-
-# Default primary key field type
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# --- CONFIGURAÇÃO ADICIONAL DE ARQUIVOS ESTÁTICOS ---
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
-
 ]
 
-# Configuração de email para o terminal
+
+# ====================================================================
+# OUTRAS CONFIGURAÇÕES
+# ====================================================================
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Configuração de email para o terminal (ótimo para desenvolvimento)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

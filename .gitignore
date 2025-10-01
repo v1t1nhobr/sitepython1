@@ -1,5 +1,6 @@
 # Banco de dados
 db.sqlite3
+.env
 
 # Arquivos de Cache do Python
 __pycache__/
