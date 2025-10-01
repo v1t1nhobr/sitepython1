@@ -2,23 +2,19 @@
 
 from pathlib import Path
 import os
-from dotenv import load_dotenv # <-- 1. IMPORTAMOS A FUNÇÃO
+from dotenv import load_dotenv 
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# 2. CARREGAMOS AS VARIÁVEIS DE AMBIENTE LOGO NO INÍCIO
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # ====================================================================
 # CONFIGURAÇÕES DE SEGURANÇA
 # ====================================================================
 
-# A chave secreta agora é lida DIRETAMENTE do arquivo .env
-# Removemos a chave antiga que estava escrita no código.
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-# Apenas uma definição para DEBUG e ALLOWED_HOSTS
 DEBUG = True
 ALLOWED_HOSTS = []
 
@@ -35,7 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tarefas', # Sua aplicação
+    'tarefas', 
 ]
 
 MIDDLEWARE = [
@@ -77,7 +73,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'tasko_db',
         'USER': 'root',
-        'PASSWORD': os.getenv('DB_PASSWORD'), # Lê a senha do .env
+        'PASSWORD': os.getenv('DB_PASSWORD'), 
         'HOST': 'localhost',
         'PORT': '3306',
     }
@@ -95,8 +91,8 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 ]
 
-LANGUAGE_CODE = 'pt-br' # Mudado para português do Brasil
-TIME_ZONE = 'America/Sao_Paulo' # Mudado para o fuso de São Paulo
+LANGUAGE_CODE = 'pt-br' 
+TIME_ZONE = 'America/Sao_Paulo' 
 USE_I18N = True
 USE_TZ = True
 
@@ -117,5 +113,5 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Configuração de email para o terminal (ótimo para desenvolvimento)
+# Configuração de email para o terminal 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
