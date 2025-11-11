@@ -73,11 +73,12 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'tasko_db',
         'USER': 'root',
-        'PASSWORD': os.getenv('DB_PASSWORD'), 
+        'PASSWORD': '@Vitinho9392',  # use a MESMA senha que funciona no Workbench
         'HOST': 'localhost',
         'PORT': '3306',
     }
 }
+
 
 
 # ====================================================================

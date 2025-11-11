@@ -16,7 +16,7 @@ env/
 
 # Arquivos de mídia e estáticos coletados
 /media/
-/static_root/
+/staticfiles/
 
 # Arquivos de log e outros
 *.log
