@@ -15,7 +15,8 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = os.getenv('DEBUG', 'True') == 'True'
+DEBUG = True
+
 
 ALLOWED_HOSTS = [
     'sitepython1-production.up.railway.app',
