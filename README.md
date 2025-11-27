@@ -45,8 +45,6 @@ O banco de dados foi estruturado relacionando a tabela de tarefas com a tabela d
 <img width="735" height="845" alt="image" src="https://github.com/user-attachments/assets/fc1b03f4-7eb6-498d-8694-d13a01624265" />
 
 
-![Diagrama ER](nome-do-seu-arquivo-de-imagem.jpg)
-*(Substitua "nome-do-seu-arquivo-de-imagem.jpg" pelo nome do arquivo do diagrama que você enviou)*
 
 ### Estrutura da Tabela `tarefas_tarefa`:
 * `id`: Identificador único.
